@@ -2,15 +2,19 @@ package newRadio;
 
 public class Radio {
     private long currentRadioStationNumber;
-    private long maxRadioStation = 10;
-    private long minRadioStation = 0;
-    private long maxVolume = 100;
-    private long minVolume = 0;
     private long currentVolume;
+    private long maxRadioStation;
+    private long minRadioStation;
+    private long maxVolume;
+    private long minVolume;
 
-    public Radio(long currentRadioStationNumber, long currentVolume) {
+    public Radio(long currentRadioStationNumber, long currentVolume, long maxRadioStation, long minRadioStation, long maxVolume, long minVolume) {
         this.currentRadioStationNumber = currentRadioStationNumber;
         this.currentVolume = currentVolume;
+        this.maxRadioStation = maxRadioStation;
+        this.minRadioStation = minRadioStation;
+        this.maxVolume = maxVolume;
+        this.minVolume = minVolume;
     }
 
     public long getCurrentRadioStationNumber() {
