@@ -2,31 +2,41 @@ package newRadio;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RadioTest {
 
     //    change stations
+
+    @Test
+    void checkWorkTests() {
+        Radio stations = new Radio(8, 9);
+        stations.setMinVolume(0);
+        stations.setMaxVolume(100);
+        stations.setMinRadioStation(0);
+        stations.setMaxRadioStation(10);
+        stations.setCurrentRadioStationNumber(8);
+        stations.setCurrentVolume(9);
+        assertEquals(0, stations.getMinVolume());
+        assertEquals(100, stations.getMaxVolume());
+        assertEquals(0, stations.getMinRadioStation());
+        assertEquals(10, stations.getMaxRadioStation());
+        assertEquals(8,stations.getCurrentRadioStationNumber());
+        assertEquals(9,stations.getCurrentVolume());
+    }
+
     @Test
     void changeOnNextRadioStations() {
-        Radio stations = new Radio();
-        assertEquals(0, stations.getMinRadioStation());
-        assertEquals(0, stations.getMaxRadioStation());
-        stations.setMaxRadioStation(9);
-        stations.setCurrentRadioStationNumber(7);
-        stations.setMinRadioStation(0);
+        Radio stations = new Radio(8, 9);
         stations.changeOnNextRadioStations();
-        long expected = 8;
+        long expected = 9;
         assertEquals(expected, stations.getCurrentRadioStationNumber());
         System.out.println(expected);
     }
 
     @Test
     void changeOnPrevRadioStations() {
-        Radio stations = new Radio();
-        stations.setMaxRadioStation(9);
-        stations.setCurrentRadioStationNumber(7);
-        stations.setMinRadioStation(0);
+        Radio stations = new Radio(7, 10);
         stations.changeOnPrevRadioStations();
         long expected = 6;
         assertEquals(expected, stations.getCurrentRadioStationNumber());
@@ -35,10 +45,7 @@ class RadioTest {
 
     @Test
     void nextAfterLastRadioStations() {
-        Radio stations = new Radio();
-        stations.setMaxRadioStation(9);
-        stations.setCurrentRadioStationNumber(9);
-        stations.setMinRadioStation(0);
+        Radio stations = new Radio(10, 9);
         stations.changeOnNextRadioStations();
         long expected = 0;
         assertEquals(expected, stations.getCurrentRadioStationNumber());
@@ -47,33 +54,26 @@ class RadioTest {
 
     @Test
     void prevAfterFirstRadioStations() {
-        Radio stations = new Radio();
-        stations.setMaxRadioStation(9);
-        stations.setCurrentRadioStationNumber(0);
-        stations.setMinRadioStation(0);
+        Radio stations = new Radio(0, 9);
         stations.changeOnPrevRadioStations();
-        long expected = 9;
+        long expected = 10;
         assertEquals(expected, stations.getCurrentRadioStationNumber());
         System.out.println(expected);
     }
 
     @Test
     void overMaxRadioStations() {
-        Radio stations = new Radio();
-        stations.setMaxRadioStation(9);
-        stations.setCurrentRadioStationNumber(100);
-        stations.setMinRadioStation(0);
-        long expected = 9;
+        Radio stations = new Radio(10000, 9);
+        stations.changeOnNextRadioStations();
+        long expected = 10;
         assertEquals(expected, stations.getCurrentRadioStationNumber());
         System.out.println(expected);
     }
 
     @Test
     void underMinRadioStations() {
-        Radio stations = new Radio();
-        stations.setMaxRadioStation(9);
-        stations.setCurrentRadioStationNumber(-999);
-        stations.setMinRadioStation(0);
+        Radio stations = new Radio(-5, 9);
+        stations.changeOnPrevRadioStations();
         long expected = 0;
         assertEquals(expected, stations.getCurrentRadioStationNumber());
         System.out.println(expected);
@@ -82,12 +82,7 @@ class RadioTest {
     //    Tests on change volume
     @Test
     void changeVolumeIncrease() {
-        Radio stations = new Radio();
-        assertEquals(0, stations.getMinVolume());
-        assertEquals(0, stations.getMaxVolume());
-        stations.setMaxVolume(10);
-        stations.setCurrentVolume(5);
-        stations.setMinVolume(0);
+        Radio stations = new Radio(0, 5);
         stations.changeVolumeIncrease();
         long expected = 6;
         assertEquals(expected, stations.getCurrentVolume());
@@ -96,33 +91,26 @@ class RadioTest {
 
     @Test
     void changeVolumeDecrease() {
-        Radio stations = new Radio();
-        stations.setMaxVolume(10);
-        stations.setCurrentVolume(9);
-        stations.setMinVolume(0);
+        Radio stations = new Radio(0, 8);
         stations.changeVolumeDecrease();
-        long expected = 8;
+        long expected = 7;
         assertEquals(expected, stations.getCurrentVolume());
         System.out.println(expected);
     }
 
     @Test
     void currentVolumeEqualMax() {
-        Radio stations = new Radio();
-        stations.setMaxVolume(10);
-        stations.setCurrentVolume(10);
-        stations.setMinVolume(0);
-        long expected = 10;
+        Radio stations = new Radio(0, 100);
+        stations.changeVolumeIncrease();
+        long expected = 100;
         assertEquals(expected, stations.getCurrentVolume());
         System.out.println(expected);
     }
 
     @Test
     void currentVolumeEqualMin() {
-        Radio stations = new Radio();
-        stations.setMaxVolume(10);
-        stations.setCurrentVolume(0);
-        stations.setMinVolume(0);
+        Radio stations = new Radio(0, 0);
+        stations.changeVolumeDecrease();
         long expected = 0;
         assertEquals(expected, stations.getCurrentVolume());
         System.out.println(expected);
@@ -130,11 +118,8 @@ class RadioTest {
 
     @Test
     void currentVolumeUnderMin() {
-        Radio stations = new Radio();
+        Radio stations = new Radio(0, -80);
         stations.changeVolumeDecrease();
-        stations.setMaxVolume(10);
-        stations.setCurrentVolume(-444);
-        stations.setMinVolume(0);
         long expected = 0;
         assertEquals(expected, stations.getCurrentVolume());
         System.out.println(expected);
@@ -142,12 +127,9 @@ class RadioTest {
 
     @Test
     void currentVolumeOverMax() {
-        Radio stations = new Radio();
-        stations.setMaxVolume(10);
+        Radio stations = new Radio(0, 1111);
         stations.changeVolumeIncrease();
-        stations.setCurrentVolume(1000);
-        stations.setMinVolume(0);
-        long expected = 10;
+        long expected = 100;
         assertEquals(expected, stations.getCurrentVolume());
         System.out.println(expected);
     }

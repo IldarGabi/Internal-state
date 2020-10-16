@@ -2,23 +2,22 @@ package newRadio;
 
 public class Radio {
     private long currentRadioStationNumber;
-    private long maxRadioStation;
-    private long minRadioStation;
-    private long maxVolume;
-    private long minVolume;
+    private long maxRadioStation = 10;
+    private long minRadioStation = 0;
+    private long maxVolume = 100;
+    private long minVolume = 0;
     private long currentVolume;
+
+    public Radio(long currentRadioStationNumber, long currentVolume) {
+        this.currentRadioStationNumber = currentRadioStationNumber;
+        this.currentVolume = currentVolume;
+    }
 
     public long getCurrentRadioStationNumber() {
         return currentRadioStationNumber;
     }
 
     public void setCurrentRadioStationNumber(long currentRadioStationNumber) {
-        if (currentRadioStationNumber > maxRadioStation) {
-            currentRadioStationNumber=maxRadioStation;
-        }
-        if (currentRadioStationNumber < minRadioStation) {
-            currentRadioStationNumber=minRadioStation;
-        }
         this.currentRadioStationNumber = currentRadioStationNumber;
     }
 
@@ -59,12 +58,6 @@ public class Radio {
     }
 
     public void setCurrentVolume(long currentVolume) {
-        if (currentVolume > maxVolume) {
-            currentVolume = maxVolume;
-        }
-        if (currentVolume < minVolume) {
-            currentVolume = minVolume;
-        }
         this.currentVolume = currentVolume;
     }
 
@@ -73,27 +66,32 @@ public class Radio {
         if (currentRadioStationNumber == maxRadioStation) {
             currentRadioStationNumber = minRadioStation;
         } else currentRadioStationNumber++;
+        if (currentRadioStationNumber > maxRadioStation) {
+            currentRadioStationNumber = maxRadioStation;
+        }
     }
 
     public void changeOnPrevRadioStations() {
         if (currentRadioStationNumber == minRadioStation) {
             currentRadioStationNumber = maxRadioStation;
         } else currentRadioStationNumber--;
+        if (currentRadioStationNumber < minRadioStation) {
+            currentRadioStationNumber = minRadioStation;
+        }
     }
 
-    // change volume
-    public void changeVolumeIncrease() {
-        if (currentVolume <= minVolume)
-            return;
-            ++currentVolume;
 
+    // change volume
+
+    public void changeVolumeIncrease() {
+        if (currentVolume >= maxVolume) {
+            currentVolume = maxVolume;
+        } else currentVolume++;
     }
 
     public void changeVolumeDecrease() {
-        if (currentVolume >= maxVolume)
-            return;
-            --currentVolume;
-
+        if (currentVolume <= minVolume) {
+            currentVolume = minVolume;
+        } else currentVolume--;
     }
 }
-
